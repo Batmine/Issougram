@@ -1,0 +1,28 @@
+.post {
+    background-color: white;
+    max-width: 500px; /*make our picture post fixed*/
+    border: 1px solid lightgray;
+    margin-bottom: 45px; /*space between posts*/
+}
+
+.post__image {
+    width: 100%; /*styling the image of my post in order to stay at 100% of my screen*/
+    object-fit: contain; /*keep the aspect ratio*/
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+}
+
+.post__text {
+    font-weight: normal;
+    padding: 20px;
+}
+
+.post__header {
+    display: flex; /*the flex by default gonna put the avatar and username in a row*/
+    align-items: center; /*gonna align my avatar and username*/
+    padding: 20px;
+}
+
+.post__avatar {
+    margin-right: 10px;
+}

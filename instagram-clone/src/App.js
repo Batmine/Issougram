@@ -15,9 +15,11 @@ function App() {
 
         <h1> Salam Aleykoum </h1> {/*On enlève tout pour repartir clean sur le code*/}
 
-        <Post />
-        {/* Posts */}
-        {/* Posts */}
+        <Post username="Issou " caption=" La Saint-Chancla!" imageUrl="https://zupimages.net/up/20/31/5ts2.png"/>
+        <Post username="Persian " caption=" Bon ap à moi!" imageUrl="https://jardinage.lemonde.fr/images/dossiers/2016-09/rapiette-151735.jpg"/>
+        <Post username="Tacos-boy " caption=" tequiero puta" imageUrl="https://lacerisesurlemaillot.fr/wp-content/uploads/2019/03/fish-tacos.jpg"/>
+
+
     </div>
   );
 }

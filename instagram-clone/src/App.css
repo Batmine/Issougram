@@ -4,7 +4,6 @@
 
 .app {
   background-color: #fafafa; /*coloring my app*/
-  height: 100vh; /*means the height of this element is equal to 100% of the viewport height. example: height: 50vh; If your screen height is 1000px, your element height will be equal to 500px (50% of 1000px)*/
 }
 
 .app__header{
