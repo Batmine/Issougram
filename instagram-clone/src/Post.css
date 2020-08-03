@@ -7,7 +7,7 @@
 
 .post__image {
     width: 100%; /*styling the image of my post in order to stay at 100% of my screen*/
-    object-fit: contain; /*keep the aspect ratio*/
+ /*keep the aspect ratio*/
     border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
 }

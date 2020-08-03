@@ -11,7 +11,10 @@ function App() {
 useEffect(() => {
   // this is the posts inside firebase, snapShot (every single time the database changes it take the snap of the database and this code run, map (loop through my documents))
   db.collection('posts').onSnapshot(snapshot => {
-    setPosts(snapshot.docs.map(doc => doc.data()));
+    setPosts(snapshot.docs.map(doc => ({
+      id: doc.id, //ID of the document created on my database of firebase
+      post: doc.data() // the data of the id docuent (caption, username, imageurl)
+    })));
   })
 }, []);
 
@@ -28,8 +31,8 @@ useEffect(() => {
         <h1> Salam Aleykoum </h1> {/*On enlève tout pour repartir clean sur le code*/}
 
         {
-          posts.map(post => (
-            <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+          posts.map(({id, post}) => ( //it was only post before and mapping like everything was an object, now it's an object with keys
+            <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} /> //adding now a key who is the new id of a new post, it'll just add the post without refershing everithing but just what we are adding
           )) /* map is going to every single post, and after I'm looping between the posts, map is just outputing a post component every time it catchs some informations*/
 
         }
