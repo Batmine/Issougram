@@ -4,23 +4,12 @@ import Post from './Post';
 import { db } from './firebase';
 
 function App() {
-  const [posts, setPosts] = useState([ 
-    {
-      username: "Issou",
-      caption: " La Saint-Chancla",
-      imageUrl: "https://zupimages.net/up/20/31/5ts2.png"
-    },
-    {
-      username: "Persan",
-      caption: " Bon ap à moi!",
-      imageUrl: "https://jardinage.lemonde.fr/images/dossiers/2016-09/rapiette-151735.jpg"
-    }
-  ]); /*in order to avoid hard coding this posts, it's better to make them come from somewhere, we gonna use "State", a short term memory store in react, a piece of state is how you set variables in react*/
+  const [posts, setPosts] = useState([]);
 
-//instead of having that code above hardcoded we want to pullin in our database, so we gonna use useEffect (it runs a piece of code based on a specific condition)
+//instead of having the precedent hardcoded we want to pullin in our database, so we gonna use useEffect (it runs a piece of code based on a specific condition)
 
 useEffect(() => {
-  // this is the posts inside firebase, snapShot is a very powerful listner (every single time the database changes it take the snap of the database)
+  // this is the posts inside firebase, snapShot (every single time the database changes it take the snap of the database and this code run, map (loop through my documents))
   db.collection('posts').onSnapshot(snapshot => {
     setPosts(snapshot.docs.map(doc => doc.data()));
   })

@@ -1,6 +1,6 @@
 import firebase from "firebase"
 
-const firebaseApp = firebase.initializeAp({ // code directly from firebase, we grab 3 servers from firebase (db database) (auth for log in log out creat users etc) and (storage, how we upload a bunch of pictures etc..) );
+const firebaseApp = firebase.initializeApp({ // code directly from firebase, we grab 3 servers from firebase (db database) (auth for log in log out creat users etc) and (storage, how we upload a bunch of pictures etc..) );
     apiKey: "AIzaSyDiJ43IxyWmU5p8xOvXU79-bo8f8GOK81s",
     authDomain: "instagram-clone-9f92e.firebaseapp.com",
     databaseURL: "https://instagram-clone-9f92e.firebaseio.com",

@@ -1,6 +1,6 @@
 .post {
     background-color: white;
-    max-width: 500px; /*make our picture post fixed*/
+    max-width: 400px; /*make our picture post fixed*/
     border: 1px solid lightgray;
     margin-bottom: 45px; /*space between posts*/
 }
