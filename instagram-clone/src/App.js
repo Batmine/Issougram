@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Post';
 import { db } from './firebase';
-import { Modal, Button } from '@material-ui/core';
+import { Modal, Button, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 
 
@@ -35,6 +35,9 @@ function App() {
 
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false); // A piece of state to track if the modal is open
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   //instead of having the precedent hardcoded we want to pullin in our database, so we gonna use useEffect (it runs a piece of code based on a specific condition)
   useEffect(() => {
@@ -58,7 +61,38 @@ function App() {
         onClose={() => setOpen(false)} //everytime I click outside of the modal, it set the modal to be false and it closes
       >
         <div style={modalStyle} className={classes.paper}>
-          <h2>I'm Batmine</h2>
+              <form className="app__signup">
+                <center> 
+                  <img
+                      className="app__headerImage"
+                      src="https://www.zupimages.net/up/20/31/q40v.png" /*Mon logo issougram*/
+                      alt=""
+                  />
+                </center>  
+                  <Input
+                      placeholder="username"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                   />
+
+                  <Input
+                      placeholder="email"
+                      type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                   />
+
+                  <Input
+                      placeholder="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                   />
+
+                    <Button onClick={signUp}>Sign Up</Button>
+              </form> 
+
         </div>
       </Modal>
 

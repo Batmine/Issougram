@@ -12,3 +12,8 @@
   border-bottom: 2px solid lightgray; /* creation d'une ligne de bordure en bas du header*/
   object-fit: contain; /*always keeping my issougram pic at the same aspect ratio */
 }
+
+.app__signup {
+  display: flex;
+  flex-direction: column;
+}
