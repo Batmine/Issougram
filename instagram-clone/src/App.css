@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0; /*This one rule (css reset) in order to avoid an upper space above our text on the page and have 0 margin in this case, the* means "all elements" (a universal selector so we are setting all elements to have zero margins.*/
 }
 
@@ -6,7 +6,7 @@
   background-color: #fafafa; /*coloring my app*/
 }
 
-.app__header{
+.app__header {
   background-color: rgb(245, 199, 157); /*coloring for my header*/
   padding: 20px; /*Padding crée une marge interne à l'élément. Elle sépare le contenu de la bordure. alors que Margin crée une marge autour de l'élément.*/
   border-bottom: 2px solid lightgray; /* creation d'une ligne de bordure en bas du header*/
