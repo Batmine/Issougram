@@ -34,6 +34,7 @@ function App() {
 
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false); // A piece of state to track if the modal is open
+  const [openSignIn, setOpenSignIn] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -84,11 +85,24 @@ function App() {
         });
       })
       .catch((error) => alert(error.message)); //if any error they will show an error message
+
+    setOpen(false); //We want the modal to close after we signup
   };
 
+  const signIn = (event) => {
+    //We creat the signIn function
+
+    event.preventDefault();
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
+
+    setOpenSignIn(false);
+  };
   return (
     <div className="app">
-      <Modal
+      {/*we open the modal*/}
+      <Modal // Modal for the Sign up
         open={open}
         onClose={() => setOpen(false)} //everytime I click outside of the modal, it set the modal to be false and it closes
       >
@@ -127,6 +141,39 @@ function App() {
           </form>
         </div>
       </Modal>
+      <Modal // Modal for the Sign in
+        open={openSignIn}
+        onClose={() => setOpenSignIn(false)} //everytime I click outside of the modal, it set the modal to be false and it closes
+      >
+        <div style={modalStyle} className={classes.paper}>
+          <form className="app__signup">
+            {" "}
+            {/*to look nicer the sign up*/}
+            <center>
+              <img
+                className="app__headerImage"
+                src="https://www.zupimages.net/up/20/31/q40v.png" /*Mon logo issougram*/
+                alt=""
+              />
+            </center>
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" onClick={signIn}>
+              Sign In
+            </Button>
+          </form>
+        </div>
+      </Modal>
       <div className="app__header">
         {" "}
         {/*div is a simple container, and this way of naming our css classes is called Bem, it helps you to stay consistent as you code bigger projects */}
@@ -136,8 +183,18 @@ function App() {
           alt=""
         />
       </div>
-      <Button onClick={() => setOpen(true)}>Sign up</Button>{" "}
-      {/*we open the modal*/}
+      {user ? ( // if the user exist it'll render a button logout
+        <Button onClick={() => auth.signOut()}>Logout</Button> // this is how simple to logout "auth.signOut()"
+      ) : (
+        // the line above with ) : ( this is how we make an "or", there the meaning is otherwise if the person is not login then the button Sign Up gonna show up instead
+        <div className=".app__loginContainer">
+          {" "}
+          {/*All this stuffs gonna show up when we are log in*/}
+          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>{" "}
+          {/*for this one I don't want to open the precedent modal we have,so I'll creat a new sort of variable (const [openSignIn, setOpenSignIn] = useState (false);) with a new modal  */}
+          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        </div>
+      )}
       <h1> Salam Aleykoum </h1>{" "}
       {/*On enlève tout pour repartir clean sur le code*/}
       {
