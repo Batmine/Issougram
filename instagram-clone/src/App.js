@@ -4,6 +4,7 @@ import Post from "./Post";
 import { db, auth } from "./firebase";
 import { Modal, Button, Input } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
+import ImageUpload from "./ImageUpload";
 
 function getModalStyle() {
   //styling of my modal
@@ -63,14 +64,16 @@ function App() {
   //instead of having the precedent hardcoded we want to pullin in our database, so we gonna use useEffect (it runs a piece of code based on a specific condition)
   useEffect(() => {
     // this is the posts inside firebase, snapShot (every single time the database changes it take the snap of the database and this code run, map (loop through my documents))
-    db.collection("posts").onSnapshot((snapshot) => {
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id, //ID of the document created on my database of firebase
-          post: doc.data(), // the data of the id docuent (caption, username, imageurl)
-        }))
-      );
-    });
+    db.collection("posts")
+      .orderBy("timestamp", "desc") // before we do a snapshot we'll order the posts added by timestamp (desc = descending).
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id, //ID of the document created on my database of firebase
+            post: doc.data(), // the data of the id docuent (caption, username, imageurl)
+          }))
+        );
+      });
   }, []);
 
   const signUp = (event) => {
@@ -101,6 +104,14 @@ function App() {
   };
   return (
     <div className="app">
+      {user?.displayName ? ( // this line is to check if the user.displayName is present, We want to render the module of ImageUpload only if we are sign in, otherwise if we are logout, we'll be trying to access a proprety who isn't even there. Even if we upload, user may not be define so we put an other check with user?, it's adding an opptional in javascript (saying if the user is not there don't freak out and break)
+        <ImageUpload username={user.displayName} />
+      ) : (
+        //we are passing the user that we have in App.js for the person use for signing up and passing it to the compenent ImageUpload as a username
+        //The aim is to render out (restituer) the ImageUpload there
+        // Or if the user.displayName not there then put this message below
+        <h3>Sorry peasant, you need to login in order to upload!</h3>
+      )}
       {/*we open the modal*/}
       <Modal // Modal for the Sign up
         open={open}
