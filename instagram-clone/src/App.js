@@ -5,6 +5,7 @@ import { db, auth } from "./firebase";
 import { Modal, Button, Input } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import ImageUpload from "./ImageUpload";
+import InstagramEmbed from "react-instagram-embed";
 
 function getModalStyle() {
   //styling of my modal
@@ -30,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const classes = useStyles(); //we need classes, they use makeStyles hook and gave us the useStyles parameters, we just call it and give us access to classes and we end up using it below (classes.paper) and there is a bunch of styling
+  const classes = useStyles(); //we need classes, they use makeStyles hook and gave us the useStyles parameters
+  //we just call it and give us access to classes and we end up using it below (classes.paper) and there is a bunch of styling
   const [modalStyle] = useState(getModalStyle);
 
   const [posts, setPosts] = useState([]);
@@ -42,7 +44,8 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    //there is a listenner in useEffect suited to front end, every time it changes, it refire this code below (what if this code get fire 10 times because the username get change 10 times, well have 10 listenners and it will be really heavy) so we use const = unsubscribe to avoid this in the line below before our back end listenner
+    //there is a listenner in useEffect suited to front end, every time it changes, it refire this code below (what if this code get fire 10 times because the username get change 10 times,
+    //well have 10 listenners and it will be really heavy) so we use const = unsubscribe to avoid this in the line below before our back end listenner
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       //This gonna listen every single time authentique change happen, it's a back end listenner (if we log in if we don't log in), const unsubscribe is like I said in the line above
       if (authUser) {
@@ -57,7 +60,8 @@ function App() {
 
     return () => {
       // it tells if the useEffect fire again, perform some cleanup actions before you refire the useEffect
-      unsubscribe(); //in that way we unsubscribe the listenner, it doesn't spam (exemple: let's say we log in and we update the username, it's gonna refile the frond end code but before it doeas that we are saying to detach the listenner that we just set up (auth.onAuthStateChanged) in order to not have diplucate and then it'll refire it)
+      unsubscribe(); //in that way we unsubscribe the listenner, it doesn't spam (exemple: let's say we log in and we update the username, it's gonna refile the frond end code
+      // but before it doeas that we are saying to detach the listenner that we just set up (auth.onAuthStateChanged) in order to not have diplucate and then it'll refire it)
     };
   }, [user, username]); // we have to include here their independence, any time they chance they have to be fireup
 
@@ -83,7 +87,8 @@ function App() {
       .createUserWithEmailAndPassword(email, password) //creat the user and catch it
       .then((authUser) => {
         return authUser.user.updateProfile({
-          //in order to get the username updated, in our State we have the user we just type in so we telling (return authUser) go to the user you just log in with, then update there profile and display that username
+          //in order to get the username updated, in our State we have the user we just type in so we telling (return authUser) go to the user you just log in with,
+          //then update their profile and display that username
           displayName: username, // and after all this, this will add it to firebase as an attribute
         });
       })
@@ -104,14 +109,6 @@ function App() {
   };
   return (
     <div className="app">
-      {user?.displayName ? ( // this line is to check if the user.displayName is present, We want to render the module of ImageUpload only if we are sign in, otherwise if we are logout, we'll be trying to access a proprety who isn't even there. Even if we upload, user may not be define so we put an other check with user?, it's adding an opptional in javascript (saying if the user is not there don't freak out and break)
-        <ImageUpload username={user.displayName} />
-      ) : (
-        //we are passing the user that we have in App.js for the person use for signing up and passing it to the compenent ImageUpload as a username
-        //The aim is to render out (restituer) the ImageUpload there
-        // Or if the user.displayName not there then put this message below
-        <h3>Sorry peasant, you need to login in order to upload!</h3>
-      )}
       {/*we open the modal*/}
       <Modal // Modal for the Sign up
         open={open}
@@ -193,33 +190,68 @@ function App() {
           src="https://www.zupimages.net/up/20/31/q40v.png" /*Mon logo issougram*/
           alt=""
         />
+        {user ? ( // if the user exist it'll render a button logout
+          <Button onClick={() => auth.signOut()}>Logout</Button> // this is how simple to logout "auth.signOut()"
+        ) : (
+          // the line above with ) : ( this is how we make an "or", there the meaning is otherwise if the person is not login then the button Sign Up gonna show up instead
+          <div className=".app__loginContainer">
+            {" "}
+            {/*All this stuffs gonna show up when we are log in*/}
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>{" "}
+            {/*for this one I don't want to open the precedent modal we have,so I'll creat a new sort of variable (const [openSignIn, setOpenSignIn] = useState (false);) with a new modal  */}
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
-      {user ? ( // if the user exist it'll render a button logout
-        <Button onClick={() => auth.signOut()}>Logout</Button> // this is how simple to logout "auth.signOut()"
-      ) : (
-        // the line above with ) : ( this is how we make an "or", there the meaning is otherwise if the person is not login then the button Sign Up gonna show up instead
-        <div className=".app__loginContainer">
-          {" "}
-          {/*All this stuffs gonna show up when we are log in*/}
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>{" "}
-          {/*for this one I don't want to open the precedent modal we have,so I'll creat a new sort of variable (const [openSignIn, setOpenSignIn] = useState (false);) with a new modal  */}
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+
+      <div className="app__posts">
+        <div className="app__postsleft">
+          {
+            posts.map((
+              { id, post } //it was only post before and mapping like everything was an object, now it's an object with keys
+            ) => (
+              <Post
+                key={id}
+                postId={id}
+                user={user} //this is the user who sign in
+                username={post.username}
+                caption={post.caption}
+                imageUrl={post.imageUrl}
+              /> //adding now a key who is the new id of a new post, it'll just add the post without refershing everithing but just what we are adding
+            )) // map is going to every single post, and after I'm looping between the posts, map is just outputing a post component every time it catchs some informations
+          }
         </div>
+        <div className="app__postsRight">
+          <InstagramEmbed //we can integrate an true instagram post to put it more cooler
+            url="https://www.instagram.com/p/CCXBkLBJ2hZ/?igshid=u7kwehv8wckm"
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName="div"
+            protocol=""
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          />
+        </div>
+      </div>
+      {user?.displayName ? ( // this line is to check if the user.displayName is present, We want to render the module of ImageUpload only if we are sign in, otherwise if we are logout,
+        //we'll be trying to access a proprety who isn't even there. Even if we upload, user may not be define so we put an other check with user?,
+        //it's adding an opptional in javascript (saying if the user is not there don't freak out and break)
+        <ImageUpload username={user.displayName} />
+      ) : (
+        //we are passing the user that we have in App.js for the person use for signing up and passing it to the component ImageUpload as a username
+        //The aim is to render out (restituer) the ImageUpload there
+        // Or if the user.displayName not there then put this message below
+        <center>
+          {" "}
+          <h2>
+            {" "}
+            Sorry peasant, you need to login in order to upload and comment!
+          </h2>
+        </center>
       )}
-      <h1> Salam Aleykoum </h1>{" "}
-      {/*On enlève tout pour repartir clean sur le code*/}
-      {
-        posts.map((
-          { id, post } //it was only post before and mapping like everything was an object, now it's an object with keys
-        ) => (
-          <Post
-            key={id}
-            username={post.username}
-            caption={post.caption}
-            imageUrl={post.imageUrl}
-          /> //adding now a key who is the new id of a new post, it'll just add the post without refershing everithing but just what we are adding
-        )) /* map is going to every single post, and after I'm looping between the posts, map is just outputing a post component every time it catchs some informations*/
-      }
     </div>
   );
 }

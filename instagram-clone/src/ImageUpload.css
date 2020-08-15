@@ -1,0 +1,13 @@
+.imageupload {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-left: auto; /*gonna determine the margin in the sides and center it*/
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.imageupload__progress {
+  width: 100%; /*pour avoir la bar de progression totallement remplie*/
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@material-ui/core";
 import firebase from "firebase";
 import { storage, db } from "./firebase";
+import "./ImageUpload.css";
 
 function ImageUpload({ username }) {
   const [image, setImage] = useState(null); // for the image "choose file" that we gonna upload
@@ -17,7 +18,9 @@ function ImageUpload({ username }) {
   };
 
   const handleUpload = () => {
-    const uploadTask = storage.ref(`images/${image.name}`).put(image); //this line is saying, access storage of firebase, get a reference to this folder (we are creating a new folder there images/ and storing evrything inside on him), image.name is the file name we selected, put(image) is litteraly putting the image we selected into that fold
+    const uploadTask = storage.ref(`images/${image.name}`).put(image); //this line is saying, access storage of firebase, get a reference to this folder
+    //(we are creating a new folder there images/ and storing evrything inside on him), image.name is the file name we selected,
+    //put(image) is litteraly putting the image we selected into that fold
 
     uploadTask.on(
       // we have to listen to what's happening now
@@ -47,7 +50,7 @@ function ImageUpload({ username }) {
             db.collection("posts").add({
               timestamp: firebase.firestore.FieldValue.serverTimestamp(), //tmestamp based on the server where the codes are living, and we'll able to see all the posts by the correct timing
               caption: caption,
-              imageUrl: url, // it's the url of our image that we just uploaded in firebase storage, gave us a download link and now we are pushing the download link as part of the post in the db
+              imageUrl: url, //it's the url of our image that we just uploaded in firebase storage, gave us a download link and now we are pushing the download link as part of the post in the db
               username: username,
             });
 
@@ -60,20 +63,21 @@ function ImageUpload({ username }) {
   };
 
   return (
-    <div>
+    <div className="imageupload">
       {/* I want to have... */}
       {/* Caption input... */}
       {/* File picker... */}
       {/* Post button... */}
 
-      <progress value={progress} max="100" />
+      <progress className="imageupload__progress" value={progress} max="100" />
       <input
         type="text"
         placeholder="Enter a caption..."
         onChange={(event) => setCaption(event.target.value)}
         value={caption}
       />
-      {/*For our caption, we need a piece of state to keep track of what we are typing inside the caption, and the onChange event gonna keep updateding the caption, grab the latest text and pops it inside the caption, like this we'll always have the latest caption stored inside our state*/}
+      {/*For our caption, we need a piece of state to keep track of what we are typing inside the caption, and the onChange event gonna keep updateding the caption, 
+      grab the latest text and pops it inside the caption, like this we'll always have the latest caption stored inside our state*/}
       <input type="file" onChange={handleChange} />
       {/*For our File picker, the input type file that's when the window open for selecting the file and when we clic a file it fire "handleChange"*/}
       <Button onClick={handleUpload}>
